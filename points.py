@@ -5,6 +5,32 @@ import matplotlib.pyplot as plt
 def get_distance (point_1,point_2):
     return math.sqrt((point_1.x-point_2.x)**2+(point_1.y-point_2.y)**2)
 
+def generate_real_spiral(size):
+    points = []
+    x = size[0]/2
+    y = size[1]/2
+    points.append([x,y])
+    n = 1
+    while len(points) < size[0]*size[1]:
+        for i in range(n):
+            y += 1
+            points.append([x,y])
+        for i in range(n):
+            x += 1
+            points.append([x,y])
+        n += 1
+        for i in range(n):
+            y -= 1
+            points.append([x,y])
+        for i in range(n):
+            x -= 1
+            points.append([x,y])
+        n += 1
+    for i in range(n-1):
+        y += 1
+        points.append([x,y])
+    return points
+
 def generate_spiral(size):
     points = [[0,0]]
     x = 0
@@ -94,7 +120,7 @@ if __name__ == "__main__":
     plot_type = str(input("Plot type (spiral/columns/random): ")).lower()
     point_size = int(input("Plotted point size: "))
     if plot_type == "spiral":
-        points = generate_spiral(size)
+        points = generate_real_spiral(size)
     if plot_type == "columns":
         points = generate_columns_upwards(size)
     if plot_type == "random":
