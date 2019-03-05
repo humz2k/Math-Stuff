@@ -5,30 +5,40 @@ import matplotlib.pyplot as plt
 def get_distance (point_1,point_2):
     return math.sqrt((point_1.x-point_2.x)**2+(point_1.y-point_2.y)**2)
 
+def rotate_right(direction):
+    new_direction = []
+    if direction[0] == 1:
+        new_direction = [0,-1]
+    elif direction[1] == 1:
+        new_direction = [1,0]
+    elif direction[0] == -1:
+        new_direction = [0,1]
+    elif direction[1] == -1:
+        new_direction = [-1,0]
+    return new_direction
+
+def move_direction(position,direction,n):
+    new_position = [position[0] + direction[0] * n,position[1] + direction[1] * n]
+    return new_position
+
 def generate_real_spiral(size):
-    points = []
-    x = size[0]/2
-    y = size[1]/2
-    points.append([x,y])
+    current_position = [size[0]/2,size[1]/2]
+    points = [current_position]
     n = 1
+    direction = [0,1]
     while len(points) < size[0]*size[1]:
         for i in range(n):
-            y += 1
-            points.append([x,y])
+            current_position = move_direction(current_position,direction,1)
+            points.append(current_position)
+        direction = rotate_right(direction)
         for i in range(n):
-            x += 1
-            points.append([x,y])
-        n += 1
-        for i in range(n):
-            y -= 1
-            points.append([x,y])
-        for i in range(n):
-            x -= 1
-            points.append([x,y])
+            current_position = move_direction(current_position,direction,1)
+            points.append(current_position)
+        direction = rotate_right(direction)
         n += 1
     for i in range(n-1):
-        y += 1
-        points.append([x,y])
+        current_position = move_direction(current_position,direction,1)
+        points.append(current_position)
     return points
 
 def generate_spiral(size):
@@ -73,7 +83,8 @@ def generate_columns_upwards(size):
 
 def generate_random(size):
     points = generate_columns_upwards(size)
-    shuffle(points)
+    for i in range(10):
+        shuffle(points)
     return points
 
 
@@ -117,7 +128,7 @@ if __name__ == "__main__":
     size = [x_size,y_size]
     plane = plane(10,size)
 
-    plot_type = str(input("Plot type (spiral/columns/random): ")).lower()
+    plot_type = str(input("Plot type (spiral/snake/columns/random): ")).lower()
     point_size = int(input("Plotted point size: "))
     if plot_type == "spiral":
         points = generate_real_spiral(size)
@@ -125,6 +136,8 @@ if __name__ == "__main__":
         points = generate_columns_upwards(size)
     if plot_type == "random":
         points = generate_random(size)
+    if plot_type == "snake":
+        points = generate_spiral(size)
 
     for index,position in enumerate(points):
         plane.create_point(position)
