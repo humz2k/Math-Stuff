@@ -111,7 +111,7 @@ class plane:
          new_point = point(position)
          if self.check_valid(new_point) and not [new_point.x,new_point.y] in self.points_raw:
              self.points.append(new_point)
-             self.points_raw.append([new_point.x,new_point.y])
+             self.points_raw.insert(0,[new_point.x,new_point.y])
 
     def plot(self,point_size):
         x = []
